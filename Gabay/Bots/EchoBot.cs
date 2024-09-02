@@ -7,6 +7,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using Gabay.Cards;
 using Newtonsoft.Json;
+using Microsoft.Bot.Builder.TraceExtensions;
+using Gabay.Commands;
+using System.Collections;
+using System.Linq;
+using System;
 
 namespace Gabay.Bots
 {
@@ -14,72 +19,28 @@ namespace Gabay.Bots
     {
         protected override async Task OnMessageActivityAsync(ITurnContext<IMessageActivity> turnContext, CancellationToken cancellationToken)
         {
-            var replyText = $"Echo: {turnContext.Activity.Text}";
-            await turnContext.SendActivityAsync(MessageFactory.Text(replyText, replyText), cancellationToken);
+        
+            if (ADD.commands.Any(command => turnContext.Activity.Text.IndexOf(command, StringComparison.OrdinalIgnoreCase) >= 0))
+            {
+                await ADD.AddTriggered(turnContext, cancellationToken);
+            }
+            else
+            {
+                await turnContext.SendActivityAsync(MessageFactory.Text("Didn't know something was up"), cancellationToken);
+            }
         }
 
         protected override async Task OnMembersAddedAsync(IList<ChannelAccount> membersAdded, ITurnContext<IConversationUpdateActivity> turnContext, CancellationToken cancellationToken)
         {
-            /*
-            LoginCard Card = new LoginCard();
-            Attachment loginAttachment = LoginCard.cardSchema();
-            var welcomeText = "Hi, I am Gabay an online chatbot interface todo list tool. To continue please input your username and password";
             foreach (var member in membersAdded)
             {
                 if (member.Id != turnContext.Activity.Recipient.Id)
                 {
-                    await turnContext.SendActivityAsync(MessageFactory.Attachment(loginAttachment), cancellationToken);
+                    await turnContext.SendActivityAsync(
+                        MessageFactory.Attachment(LoginCard.cardSchema())
+                        , cancellationToken);
                 }
-            }
-            */
-
-            string cardJson = @"
-            {
-                ""$schema"": ""http://adaptivecards.io/schemas/adaptive-card.json"",
-                ""type"": ""AdaptiveCard"",
-                ""version"": ""1.3"",
-                ""body"": [
-                    {
-                        ""type"": ""Container"",
-                        ""items"": [
-                            {
-                                ""type"": ""Input.Text"",
-                                ""placeholder"": ""Placeholder text"",
-                                ""label"": ""Username:"",
-                                ""id"": ""username""
-                            },
-                            {
-                                ""type"": ""Input.Text"",
-                                ""placeholder"": ""Placeholder text"",
-                                ""label"": ""Password"",
-                                ""id"": ""password"",
-                                ""isMultiline"": false,
-                                ""style"": ""text""
-                            }
-                        ]
-                    }
-                ],
-                ""actions"": [
-                    {
-                        ""type"": ""Action.Submit"",
-                        ""title"": ""Submit"",
-                        ""data"": {
-                            ""action"": ""submitForm""
-                        }
-                    }
-                ]
-            }";
-
-
-            // Convert the card JSON string to an Attachment
-            var adaptiveCard = new Attachment()
-            {
-                ContentType = "application/vnd.microsoft.card.adaptive",
-                Content = JsonConvert.DeserializeObject(cardJson),
-            };
-
-            // Send the card to the user
-            await turnContext.SendActivityAsync(MessageFactory.Attachment(adaptiveCard), cancellationToken);
+            }        
         }
     }
 }

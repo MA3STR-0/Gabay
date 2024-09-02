@@ -9,40 +9,43 @@ namespace Gabay.Cards
        private string password { get; set; }
 
         public static Attachment cardSchema() {
-            var cardJson = @"
-        {
-            ""type"": ""AdaptiveCard"",
-            ""body"": [
-                {
-                    ""type"": ""TextBlock"",
-                    ""text"": ""Login"",
-                    ""weight"": ""Bolder"",
-                    ""size"": ""Medium""
-                },
-                {
-                    ""type"": ""Input.Text"",
-                    ""id"": ""username"",
-                    ""placeholder"": ""Enter your username"",
-                    ""style"": ""text""
-                },
-                {
-                    ""type"": ""Input.Text"",
-                    ""id"": ""password"",
-                    ""placeholder"": ""Enter your password"",
-                    ""style"": ""password"",
-                    ""isRequired"": true,
-                    ""errorMessage"": ""Password is required.""
-                }
-            ],
-            ""actions"": [
-                {
-                    ""type"": ""Action.Submit"",
-                    ""title"": ""Submit""
-                }
-            ],
-            ""$schema"": ""http://adaptivecards.io/schemas/adaptive-card.json"",
-            ""version"": ""1.3""
-        }";
+            string cardJson = @"
+            {
+                ""$schema"": ""http://adaptivecards.io/schemas/adaptive-card.json"",
+                ""type"": ""AdaptiveCard"",
+                ""version"": ""1.3"",
+                ""body"": [
+                    {
+                        ""type"": ""Container"",
+                        ""items"": [
+                            {
+                                ""type"": ""Input.Text"",
+                                ""placeholder"": ""Placeholder text"",
+                                ""label"": ""Username:"",
+                                ""id"": ""username""
+                            },
+                            {
+                                ""type"": ""Input.Text"",
+                                ""placeholder"": ""Placeholder text"",
+                                ""label"": ""Password"",
+                                ""id"": ""password"",
+                                ""isMultiline"": false,
+                                ""style"": ""text""
+                            }
+                        ]
+                    }
+                ],
+                ""actions"": [
+                    {
+                        ""type"": ""Action.Submit"",
+                        ""title"": ""Submit"",
+                        ""data"": {
+                            ""action"": ""submitForm""
+                        }
+                    }
+                ]
+            }";
+
 
             // Convert the card JSON string to an Attachment
             var adaptiveCard = new Attachment()

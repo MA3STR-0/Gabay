@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Gabay.Commands
 {
-    public class ADD
+    public class Add
     {
        public static List<string> commands = new List<string> {
             "create item",

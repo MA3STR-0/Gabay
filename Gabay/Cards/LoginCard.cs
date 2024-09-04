@@ -5,10 +5,8 @@ namespace Gabay.Cards
 {
     public class LoginCard
     {
-       private string username { get; set; }
-       private string password { get; set; }
-
         public static Attachment cardSchema() {
+
             string cardJson = @"
             {
                 ""$schema"": ""http://adaptivecards.io/schemas/adaptive-card.json"",
@@ -48,7 +46,7 @@ namespace Gabay.Cards
 
 
             // Convert the card JSON string to an Attachment
-            var adaptiveCard = new Attachment()
+            Attachment adaptiveCard = new Attachment()
             {
                 ContentType = "application/vnd.microsoft.card.adaptive",
                 Content = JsonConvert.DeserializeObject(cardJson),

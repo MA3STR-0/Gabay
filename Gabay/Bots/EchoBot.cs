@@ -19,14 +19,21 @@ namespace Gabay.Bots
     {
         protected override async Task OnMessageActivityAsync(ITurnContext<IMessageActivity> turnContext, CancellationToken cancellationToken)
         {
-        
-            if (ADD.commands.Any(command => turnContext.Activity.Text.IndexOf(command, StringComparison.OrdinalIgnoreCase) >= 0))
+            if (Add.commands.Any(command => turnContext.Activity.Text.IndexOf(command, StringComparison.OrdinalIgnoreCase) >= 0))
             {
-                await ADD.AddTriggered(turnContext, cancellationToken);
+                await Add.AddTriggered(turnContext, cancellationToken);
+            }
+            else if (Edit.commands.Any(command => turnContext.Activity.Text.IndexOf(command, StringComparison.OrdinalIgnoreCase) >= 0))
+            {
+                await Edit.ConfirmReachedAsync(turnContext, cancellationToken);
+            }
+            else if (Delete.commands.Any(command => turnContext.Activity.Text.IndexOf(command, StringComparison.OrdinalIgnoreCase) >= 0))
+            {
+                await Delete.ConfirmTriggeredAsync(turnContext, cancellationToken);
             }
             else
             {
-                await turnContext.SendActivityAsync(MessageFactory.Text("Didn't know something was up"), cancellationToken);
+                await turnContext.SendActivityAsync(MessageFactory.Text("I'm sorry i don't understand, please view the instruction manual"), cancellationToken);
             }
         }
 
